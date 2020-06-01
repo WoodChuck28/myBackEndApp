@@ -18,7 +18,6 @@ export const main = handler(async (event, context) => {
       userId: event.requestContext.identity.cognitoIdentityId,
       NotesId: uuid.v1(),
       content: data.content,
-      attachment: data.attachment,
       createdAt: Date.now()
     }
   };
@@ -27,3 +26,4 @@ export const main = handler(async (event, context) => {
 
   return params.Item;
 });
+

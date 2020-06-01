@@ -1,4 +1,4 @@
-service: notes-app-2-api
+service: tickers-app-api
 
 # Create an optimized package for our functions
 package:
@@ -14,12 +14,13 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-notes
+  tableName: ${self:custom.stage}-tickers
+  #tableName2: ${self:custom.stage}-tickers
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: prod
+  stage: dev
   region: us-east-1
 
   # These environment variables are made available to our functions
@@ -66,7 +67,7 @@ functions:
     handler: get.main
     events:
       - http:
-          path: notes/{id}
+          path: tickers/{id}
           method: get
           cors: true
           authorizer: aws_iam
@@ -78,7 +79,7 @@ functions:
     handler: list.main
     events:
       - http:
-          path: notes
+          path: tickers
           method: get
           cors: true
           authorizer: aws_iam
@@ -90,7 +91,7 @@ functions:
     handler: update.main
     events:
       - http:
-          path: notes/{id}
+          path: tickers/{id}
           method: put
           cors: true
           authorizer: aws_iam
@@ -102,7 +103,7 @@ functions:
     handler: delete.main
     events:
       - http:
-          path: notes/{id}
+          path: tickers/{id}
           method: delete
           cors: true
           authorizer: aws_iam
