@@ -14,8 +14,8 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-tickers
-  #tableName2: ${self:custom.stage}-tickers
+  tableName: ${self:custom.stage}-notes
+  tableName2: ${self:custom.stage}-tickers
 
 provider:
   name: aws
@@ -27,6 +27,7 @@ provider:
   # under process.env.
   environment:
     tableName: ${self:custom.tableName}
+    tableName2: ${self:custom.tableName2}
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   iamRoleStatements:
@@ -51,7 +52,7 @@ functions:
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
   #     domain api call
   # - authorizer: authenticate using the AWS IAM role
-  create:
+  createNote:
     handler: create.main
     events:
       - http:
@@ -60,7 +61,64 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  get:
+  getNote:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /notes/{id}
+    # - method: GET request
+    handler: get.main
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  listNote:
+    # Defines an HTTP API endpoint that calls the main function in list.js
+    # - path: url path is /notes
+    # - method: GET request
+    handler: list.main
+    events:
+      - http:
+          path: notes
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  updateNote:
+    # Defines an HTTP API endpoint that calls the main function in update.js
+    # - path: url path is /notes/{id}
+    # - method: PUT request
+    handler: update.main
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
+
+  deleteNote:
+    # Defines an HTTP API endpoint that calls the main function in delete.js
+    # - path: url path is /notes/{id}
+    # - method: DELETE request
+    handler: delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
+
+  createTicker:
+    handler: create.main
+    events:
+      - http:
+          path: tickers
+          method: post
+          cors: true
+          authorizer: aws_iam
+
+  getTicker:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
     # - method: GET request
@@ -72,7 +130,7 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  list:
+  listTicker:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
     # - method: GET request
@@ -84,7 +142,7 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  update:
+  updateTicker:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
     # - method: PUT request
@@ -96,7 +154,7 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  delete:
+  deleteTicker:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
     # - method: DELETE request
