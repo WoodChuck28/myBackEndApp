@@ -19,7 +19,7 @@ Resources:
   TickersTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:custom.tableName2}
+      TableName2: ${self:custom.tableName2}
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S
