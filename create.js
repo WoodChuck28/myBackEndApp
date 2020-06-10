@@ -16,7 +16,7 @@ export const main = handler(async (event, context) => {
     // - 'createdAt': current Unix timestamp
     Item: {
       userId: event.requestContext.identity.cognitoIdentityId,
-      tickersId: uuid.v1(),
+      blogsId: uuid.v1(),
       content: data.content,
       createdAt: Date.now()
     }

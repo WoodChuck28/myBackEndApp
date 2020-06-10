@@ -1,4 +1,4 @@
-service: tickers-app-api
+service: blogs-app-api
 
 # Create an optimized package for our functions
 package:
@@ -14,7 +14,7 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-tickers
+  TableName: ${self:custom.stage}-blogs
 
 provider:
   name: aws
@@ -25,7 +25,7 @@ provider:
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    tableName: ${self:custom.tableName}
+    TableName: ${self:custom.tableName}
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   iamRoleStatements:
@@ -41,7 +41,7 @@ provider:
       # Restrict our IAM role permissions to
       # the specific table for the stage
       Resource:
-        - "Fn::GetAtt": [ TickersTable, Arn ]
+        - "Fn::GetAtt": [ BlogsTable, Arn ]
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
@@ -55,7 +55,7 @@ functions:
     handler: create.main
     events:
       - http:
-          path: tickers
+          path: blogs
           method: post
           cors: true
           authorizer: aws_iam
@@ -67,7 +67,7 @@ functions:
     handler: get.main
     events:
       - http:
-          path: tickers/{id}
+          path: blogs/{id}
           method: get
           cors: true
           authorizer: aws_iam
@@ -79,7 +79,7 @@ functions:
     handler: list.main
     events:
       - http:
-          path: tickers
+          path: blogs
           method: get
           cors: true
           authorizer: aws_iam
@@ -91,7 +91,7 @@ functions:
     handler: update.main
     events:
       - http:
-          path: tickers/{id}
+          path: blogs/{id}
           method: put
           cors: true
           authorizer: aws_iam
@@ -103,7 +103,7 @@ functions:
     handler: delete.main
     events:
       - http:
-          path: tickers/{id}
+          path: blogs/{id}
           method: delete
           cors: true
           authorizer: aws_iam
