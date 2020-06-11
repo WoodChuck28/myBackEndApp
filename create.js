@@ -18,6 +18,8 @@ export const main = handler(async (event, context) => {
       userId: event.requestContext.identity.cognitoIdentityId,
       blogsId: uuid.v1(),
       content: data.content,
+      topic: data.topic,
+      date: data.date,
       createdAt: Date.now()
     }
   };
