@@ -22,7 +22,7 @@ Resources:
         Ref: CognitoIdentityPool
       Roles:
         authenticated:
-          Fn::GetAtt: [CognitoAuthRole, CognitoUnAuthRole, Arn]
+          Fn::GetAtt: [CognitoAuthRole, Arn]
           
   # IAM role used for authenticated users
   CognitoAuthRole:
@@ -85,46 +85,6 @@ Resources:
                       - '$'
                       - '{cognito-identity.amazonaws.com:sub}/*'
 
-  CognitoUnauthRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Path: /
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: 'Allow'
-            Principal:
-              Federated: 'cognito-identity.amazonaws.com'
-            Action:
-              - 'sts:AssumeRoleWithWebIdentity'
-            
-      Policies:
-        - PolicyName: 'CognitoUnauthorizedPolicy'
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: 'Allow'
-                Action:
-                  - 'mobileanalytics:PutEvents'
-                  - 'cognito-sync:*'
-                  - 'cognito-identity:*'
-                Resource: '*'
-              
-              # Allow users to invoke our API
-              - Effect: 'Allow'
-                Action:
-                  - 'execute-api:Invoke'
-                Resource:
-                  Fn::Join:
-                    - ''
-                    -
-                      - 'arn:aws:execute-api:'
-                      - Ref: AWS::Region
-                      - ':'
-                      - Ref: AWS::AccountId
-                      - ':'
-                      - Ref: ApiGatewayRestApi
-                      - '/*'
   
 # Print out the Id of the Identity Pool that is created
 Outputs:
